@@ -12,7 +12,7 @@ const readStream = Readable.from(stdin);
 
 readStream.on('data', (chunk) => {
   const text = `${chunk}`;
-  if (text === 'exit\n') {
+  if (text.trim() === 'exit') {
     readStream.destroy();
     return;
   }
