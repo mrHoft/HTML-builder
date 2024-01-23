@@ -6,12 +6,22 @@ const origin = 'files';
 const target = 'files-copy';
 let filesList = [];
 
+function rmDir(target) {
+  return new Promise((resolve, reject) => {
+    fs.rm(path.join(__dirname, target), { recursive: true }, (error) => {
+      if (error) return reject(error);
+      console.log(`Directory ${target} deleted successfully.`);
+      resolve();
+    });
+  });
+}
+
 function mkDir() {
   fs.mkdir(path.join(__dirname, target), { recursive: true }, (err) => {
     if (err) {
       return console.error(err);
     }
-    console.log(`Directory ${target} created successfully!`);
+    console.log(`Directory ${target} created successfully.`);
     copyFiles();
   });
 }
@@ -32,7 +42,8 @@ function copyFiles() {
   }
 }
 
-function copyDir() {
+async function copyDir() {
+  await rmDir(target).catch((error) => {});
   readdir(path.join(__dirname, origin)).then((files) => {
     filesList = [...files];
     mkDir();
